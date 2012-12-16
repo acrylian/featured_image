@@ -1,11 +1,11 @@
 <?php
 /**
- * This plugin provides a functionality to assign an album thumbnail to an Zenpage news article via the backend.
- * You can use this image as an intro image to your article e.g. in the news loop. The benefit to the embedding of an image 		   			
- * within the text of your article is that you can controll the size of it using the object mode and Zenphoto's image processor
+ * This plugin provides a functionality to assign an album thumbnail from any top level albums to an Zenpage news article as a "featured image"
+ * You can use this image as an intro image to your article e.g. in the news loop. The benefit compared to the embedding an image 		   			
+ * within the text of your article statically is that you can controll the size of it using the object mode and Zenphoto's image processor
  * on your theme dynamically.
  *
- * Example usage on news.php either within the news loop or for single article display:
+ * Example usage on news.php either within the news loop or for single article display using the Zenphoto object model:
  * $thumb = getAttachedArticleAlbumThumb($_zp_current_zenpage_news); 
  * if($thumb) {
  *  ?><img src="<?php echo pathurlencode($thumb->getThumb()); ?>" alt="<?php echo html_encode($thumb->getTitle()); ?>" /><?php
@@ -17,7 +17,7 @@
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
 $plugin_description = gettext("Attach an album thumb to an news article.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.1.2';
+$plugin_version = '1.4.3';
 if(getOption('zp_plugin_zenpage')) {
 		zp_register_filter('publish_article_utilities','getAttachAlbumThumbSelector');
 		zp_register_filter('new_article','saveAttachAlbumThumbSelection');
@@ -124,7 +124,7 @@ function deleteAttachedArticleAlbumThumb($allow,$obj) {
 /**
  * Returns the album thumb image object if one assigned
  *
- * @param ubj $obj news article object
+ * @param ubj $obj news article object you want the featured image
  */
 function getAttachedArticleAlbumThumb($obj) {
 	global $_zp_gallery;
