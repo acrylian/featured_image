@@ -10,6 +10,7 @@
  * if($thumb) {
  *  ?><img src="<?php echo pathurlencode($thumb->getThumb()); ?>" alt="<?php echo html_encode($thumb->getTitle()); ?>" /><?php
  * }
+ * Requirement: Zenpage CMS plugin and a theme supporting it
  *
  * @author Malte Müller (acrylian)
  * @package plugins
@@ -17,7 +18,8 @@
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
 $plugin_description = gettext("Attach an album thumb to an news article.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.3';
+$plugin_version = '1.4.4';
+$plugin_disable = (!getOption('zp_plugin_zenpage'))?gettext('The Zenpage CMS plugin is required for this and not enabled!'):false;
 if(getOption('zp_plugin_zenpage')) {
 		zp_register_filter('publish_article_utilities','getAttachAlbumThumbSelector');
 		zp_register_filter('new_article','saveAttachAlbumThumbSelection');
