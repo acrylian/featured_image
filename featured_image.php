@@ -6,7 +6,7 @@
  * on your theme dynamically.
  *
  * Example usage on news.php either within the news loop or for single article display using the Zenphoto object model:
- * $thumb = getAttachedArticleAlbumThumb($_zp_current_zenpage_news); 
+ * $thumb = getFeaturedImage($_zp_current_zenpage_news); 
  * if($thumb) {
  *  ?><img src="<?php echo pathurlencode($thumb->getThumb()); ?>" alt="<?php echo html_encode($thumb->getTitle()); ?>" /><?php
  * }
@@ -21,10 +21,10 @@ $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.4.4';
 $plugin_disable = (!getOption('zp_plugin_zenpage'))?gettext('The Zenpage CMS plugin is required for this and not enabled!'):false;
 if(getOption('zp_plugin_zenpage')) {
-		zp_register_filter('publish_article_utilities','getAttachAlbumThumbSelector');
-		zp_register_filter('new_article','saveAttachAlbumThumbSelection');
-		zp_register_filter('update_article','saveAttachAlbumThumbSelection');
-		zp_register_filter('remove_object','deleteAttachedArticleAlbumThumb');
+		zp_register_filter('publish_article_utilities','getFeaturedImageSelector');
+		zp_register_filter('new_article','saveFeaturedImageSelection');
+		zp_register_filter('update_article','saveFeaturedImageSelection');
+		zp_register_filter('remove_object','deleteFeaturedImage');
 }
 
 /*************************
@@ -39,10 +39,10 @@ if(getOption('zp_plugin_zenpage')) {
  * @param string $prefix (not used)
  * @return string
  */
-function getAttachAlbumThumbSelector($html, $obj, $prefix='') {
+function getFeaturedImageSelector($html, $obj, $prefix='') {
 	$html .= '<hr /><p>Select album for thumb attachement</p>';
-	$html .= '<select size="1" style="width: 180px" id="selection_albumthumbarticle" name="selection_albumthumbarticle">';
-	$selection = getAlbumThumbSelection($obj);
+	$html .= '<select size="1" style="width: 180px" id="featuredimage" name="featuredimage">';
+	$selection = getFeaturedImageSelection($obj);
 	$noneselected = ' selected="selected"';
 	if(!$selection || $selection == 'none') { 
 		$noneselected = '';
@@ -69,9 +69,9 @@ function getAttachAlbumThumbSelector($html, $obj, $prefix='') {
  * Gets the album selection of this article
  * @param object $obj Object of the item to assign the thumb
  */
-function getAlbumThumbSelection($obj) {
+function getFeaturedImageSelection($obj) {
 	$aux = $obj->getID();
-	$query = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote('selection_albumthumbarticle')." AND `aux` = ".db_quote($aux));
+	$query = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote('featuredimage_article')." AND `aux` = ".db_quote($aux));
 	if($query) {
 		return $query['data'];
 	} else {
@@ -84,10 +84,10 @@ function getAlbumThumbSelection($obj) {
  * @param string $message Message (returns empty or an error)
  * @param object $obj Object of the item to assign the thumb
  */
-function saveAttachAlbumThumbSelection($message,$obj) {
-	if(isset($_POST['selection_albumthumbarticle'])) {
-		$type = 'selection_albumthumbarticle';
-		$data = sanitize($_POST['selection_albumthumbarticle']);
+function saveFeaturedImageSelection($message,$obj) {
+	if(isset($_POST['featuredimage'])) {
+		$type = 'featuredimage_article';
+		$data = sanitize($_POST['featuredimage']);
 		$aux = $obj->getID();
 		$query = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote($type)." AND `aux` = ".db_quote($aux));
 		if($query) {
@@ -109,11 +109,11 @@ function saveAttachAlbumThumbSelection($message,$obj) {
  * @param object $obj the object being removed
  * @return bool
  */
-function deleteAttachedArticleAlbumThumb($allow,$obj) {
+function deleteFeaturedImage($allow,$obj) {
 	if(get_class($obj) == 'ZenpageNews') {
-		$check = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = 'selection_albumthumbarticle' AND `aux` = ".$obj->getID());
+		$check = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = 'featuredimage_article' AND `aux` = ".$obj->getID());
 		if($check) {
-			$query = query('DELETE FROM '.prefix('plugin_storage').' WHERE `aux` = '.$obj->getID().' AND `type` = "selection_albumthumbarticle"',false);
+			$query = query('DELETE FROM '.prefix('plugin_storage').' WHERE `aux` = '.$obj->getID().' AND `type` = "featuredimage_article"',false);
 		}
 	}
 	return $allow;
@@ -128,9 +128,9 @@ function deleteAttachedArticleAlbumThumb($allow,$obj) {
  *
  * @param ubj $obj news article object you want the featured image
  */
-function getAttachedArticleAlbumThumb($obj) {
+function getFeaturedImage($obj) {
 	global $_zp_gallery;
-	$album = getAlbumThumbSelection($obj);
+	$album = getFeaturedImage($obj);
 	if(!$album || $album == 'none') {
 		return NULL;
 	} else {
