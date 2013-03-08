@@ -8,4 +8,4 @@ You can only choose the album thumb of top level albums currently.
 
 Future plans: 
 --------
-This plugin will be incorporated into the TinyMCE plugin tinyZenpage officially and allow the selection of any image eventually.
+This plugin's functionality is scheduled to be incorporated probably into the TinyMCE plugin "tinyZenpage" officially and allow the selection of any image eventually.
