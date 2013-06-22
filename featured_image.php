@@ -14,6 +14,7 @@
  *
  * @author Malte Müller (acrylian)
  * @package plugins
+ * @subpackage misc
  */
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
 $plugin_description = gettext("Attach an album thumb to an news article.");
