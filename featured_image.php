@@ -2,8 +2,8 @@
 /**
  * This plugin provides a functionality to assign an album thumbnail from any top level albums to an Zenpage news article as a "featured image"
  * You can use this image as an intro image to your article e.g. in the news loop. The benefit compared to the embedding an image 		   			
- * within the text of your article statically is that you can controll the size of it using the object mode and Zenphoto's image processor
- * on your theme dynamically.
+ * within the text of your article statically is that you can control the size of it using the object mode and Zenphoto's image processor
+ * on your theme's layout dynamically.
  *
  * Example usage on news.php either within the news loop or for single article display using the Zenphoto object model:
  * $thumb = getFeaturedImage($_zp_current_zenpage_news); 
@@ -131,16 +131,13 @@ function deleteFeaturedImage($allow,$obj) {
  */
 function getFeaturedImage($obj) {
 	global $_zp_gallery;
-	$album = getFeaturedImage($obj);
+	$album = getFeaturedImageSelection($obj);
 	if(!$album || $album == 'none') {
 		return NULL;
 	} else {
-		$newalbum = new Album($_zp_gallery,$album);
+		$newalbum = newAlbum($album);
 		$albumthumbimg = $newalbum->getAlbumThumbImage();
 		return $albumthumbimg;
 	}
 }
-
-
-
 ?>
