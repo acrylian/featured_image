@@ -17,8 +17,8 @@
  *  <?php
  * }
  * 
- * b) Theme function for pages.php and news.php
- * <?php printSizedFeaturedImage('My featured image',500); ?>
+ * b) Theme function for pages.php and news.php for the current article, category or page
+ * <?php printSizedFeaturedImage(NULL,'My featured image',500); ?>
  *  
  * Requirement: Zenpage CMS plugin and a theme supporting it
  *
@@ -202,7 +202,7 @@ class featuredImage {
 	}
 
 	/**
-	 * Saves the album selection of this article
+	 * Saves the album selection of this item
 	 * @param object $obj Zenpage article, category or page object to assign the thumb
 	 */
 	static function saveFeaturedImageSelection($obj) {
@@ -366,7 +366,7 @@ class featuredImage {
     /**
      *  Print a custom sized version of this image based on the parameters. Multimedia itemas don't use these.
      *
-     * @param obj/string $obj Object of the Zenpage article, category you want the featured image to get
+     * @param obj/string $obj Object of the Zenpage page, article or category you want the featured image to get. If you set it to NULL on news.php or pages.php it will try to get the image for the current page, news article or category
      * @param int $size size
      * @param int $width width
      * @param int $height height
