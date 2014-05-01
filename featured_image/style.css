@@ -102,4 +102,9 @@ font-size: 13px !important;
   clear: left !important;
     margin-bottom: 15px !important;
     min-height: 25px;
-}               
+}  
+
+#fi_adminthumb img  {
+    max-width:100%;
+    height:auto;
+}
