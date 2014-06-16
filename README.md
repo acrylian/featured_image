@@ -14,9 +14,9 @@ Put the file in your `/plugins` folder. Your theme requires support for it. To u
 ```php
 $featuredimage = getFeaturedImage(<object of the Zenpage item>);
 if($featuredimage) { // if an feature image exists use the object model
-?>
-<img src="<?php echo pathurlencode($featuredimage->getThumb()); ?>" alt="<?php echo html_encode($featuredimage->getTitle()); ?>">
-<?php
+  ?>
+  <img src="<?php echo pathurlencode($featuredimage->getThumb()); ?>" alt="<?php echo  html_encode($featuredimage->getTitle()); ?>">
+  <?php
 }
 ```
   
