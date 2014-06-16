@@ -24,6 +24,7 @@
  *
  * @author Malte Müller (acrylian)
  * @package plugins
+ * @license: GPL v3
  * @subpackage misc
  */
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
