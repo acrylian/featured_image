@@ -1,6 +1,6 @@
 featured_image
 =========================================================================================
-Zenphoto plugin to attach an image from the gallery to a Zenpage article, category or page as an "featured image". You can use this image for example for headers of your single article/page/category pages or within the news article list as a thumbnail. 
+A [Zenphoto](http://www.zenphoto.org) plugin to attach an image from the gallery to a Zenpage article, category or page as an "featured image". You can use this image for example for headers of your single article/page/category pages or within the news article list as a thumbnail. 
 
 The benefit compared to the embedding an image within the text content statically is that you can control the size of it via your theme's layout dynamically as with gallery items.
  
