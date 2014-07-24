@@ -23,8 +23,9 @@
  * Requirement: Zenpage CMS plugin and a theme supporting it
  *
  * @author Malte Müller (acrylian) <info@maltem.de>
- * @package plugins
+ * @copyright 2014 Malte Müller
  * @license: GPL v3 or later
+ * @package plugins
  * @subpackage misc
  */
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
