@@ -22,15 +22,15 @@
  *  
  * Requirement: Zenpage CMS plugin and a theme supporting it
  *
- * @author Malte Müller (acrylian)
+ * @author Malte Müller (acrylian) <info@maltem.de>
  * @package plugins
- * @license: GPL v3
+ * @license: GPL v3 or later
  * @subpackage misc
  */
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
 $plugin_description = gettext("Attach an image to a Zenpage news article, category or page.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_disable = (!getOption('zp_plugin_zenpage'))?gettext('The Zenpage CMS plugin is required for this and not enabled!'):false;
 if(getOption('zp_plugin_zenpage')) {
   zp_register_filter('publish_article_utilities','featuredImage::getFeaturedImageSelector');
