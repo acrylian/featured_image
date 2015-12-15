@@ -5,7 +5,7 @@ A [Zenphoto](http://www.zenphoto.org) plugin to attach an image from the gallery
 The benefit compared to the embedding an image within the text content statically is that you can control the size of it via your theme's layout dynamically as with gallery items.
  
  
-Put the file in your `/plugins` folder. Your theme requires support for it. To use it you need to modify your theme used if it has no built in support already. 
+Put the file `featured_image.php` and the folder of the same name into your `/plugins` folder. Your theme requires support for it. To use it you need to modify your theme used if it has no built in support already. 
 
 ##Usage examples:
   
