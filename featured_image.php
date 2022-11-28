@@ -171,7 +171,7 @@ class featuredImage {
 			$html = '<ul>';
 			$albums = $albobj->getAlbums();
 			foreach ($albums as $album) {
-				$obj = newAlbum($album);
+				$obj = AlbumBase::newAlbum($album);
 				if ($obj->getNumImages() == 0) {
 					$html .= '<li>' . $obj->getTitle() . ' <small>(' . $obj->getNumImages() . ')</small>';
 				} else {
@@ -276,7 +276,7 @@ class featuredImage {
 	 */
 	static function printFeaturedImageDialog($imgobj,$buttontype) {
 		$album = $imgobj->getAlbum();
-		if (isImagePhoto($imgobj)) {
+		if ($imgobj->isPhoto()) {
 			$url = pathurlencode($imgobj->getSizedImage(400));
 		} else {
 			$url = pathurlencode($imgobj->getThumb());
@@ -320,7 +320,7 @@ class featuredImage {
 			} else {
 				//fallback for existing entries using the old albumthumb only way 
 				//where the album name was stored
-				$album = newAlbum($imagedata);
+				$album = AlbumBase::newAlbum($imagedata);
 				$imgobj = $album->getAlbumThumbImage();
 			}
 			if (is_object($imgobj)) {
@@ -386,7 +386,7 @@ class featuredImage {
     function printSizedFeaturedImage($obj = NULL,$alt = '', $size = NULL, $width = NULL, $height = NULL, $cropw = NULL, $croph = NULL, $cropx = NULL, $cropy = NULL, $class = NULL, $id = NULL, $thumbStandin = false, $effects = NULL) {
       $image = getFeaturedImage($obj);
       if ($image) {
-        if(isImagePhoto($image)) {
+        if($image->isPhoto()) {
           if(empty($alt)) $alt = $image->getTitle();
           if(!empty($class)) $class = ' class="'.$class.'"';
           if(!empty($id)) $id = ' id="'.$id.'"';
