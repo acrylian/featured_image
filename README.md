@@ -1,6 +1,6 @@
 featured_image
 ================
-**Note: The functionality will be adapted for the next major Zenphoto release. It will not be directly compatible but there might be an importer.**
+**Note: The functionality will be adapted for the next major Zenphoto release. It will not be directly compatible but there might be an importer. This plugin only gets general updates but no new features therefore.**
 
 A [Zenphoto](http://www.zenphoto.org) plugin to attach an image from the gallery to a Zenpage article, category or page as an "featured image". You can use this image for example for headers of your single article/page/category pages or within the news article list as a thumbnail. 
 
