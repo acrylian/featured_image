@@ -31,7 +31,7 @@
 $plugin_is_filter = 5|ADMIN_PLUGIN|THEME_PLUGIN;
 $plugin_description = gettext("Attach an image to a Zenpage news article, category or page.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.1.1';
+$plugin_version = '1.2';
 $plugin_disable = (!getOption('zp_plugin_zenpage'))?gettext('The Zenpage CMS plugin is required for this and not enabled!'):false;
 if(getOption('zp_plugin_zenpage')) {
   zp_register_filter('publish_article_utilities','featuredImage::getFeaturedImageSelector');
@@ -99,7 +99,7 @@ class featuredImage {
 		$albumshtml .= '<li><a href="#" class="active fi_image">'.gettext('Current featured image').'</a></li>';
 		$albums = $_zp_gallery->getAlbums();
 		foreach($albums as $album) {
-			$albobj = newAlbum($album);
+			$albobj = AlbumBase::newAlbum($album);
 			if($albobj->getNumImages() == 0) {
 				$albumshtml .= '<li>'.$albobj->getTitle().' <small>('.$albobj->getNumImages().')</small>';
 			} else {
@@ -167,15 +167,15 @@ class featuredImage {
 	 * @param object $albobj album object
 	 */
 	private static function getFeaturedImageSubalbums(&$albobj) {
-		if($albobj->getNumAlbums() != 0) {
+		if ($albobj->getNumAlbums() != 0) {
 			$html = '<ul>';
 			$albums = $albobj->getAlbums();
-			foreach($albums as $album) {
+			foreach ($albums as $album) {
 				$obj = newAlbum($album);
-				if($obj->getNumImages() == 0) {
-					$html .= '<li>'.$obj->getTitle().' <small>('.$obj->getNumImages().')</small>';
+				if ($obj->getNumImages() == 0) {
+					$html .= '<li>' . $obj->getTitle() . ' <small>(' . $obj->getNumImages() . ')</small>';
 				} else {
-					$html .= '<li><a href="#" title="'.$obj->getID().'" class="fi_album">'.$obj->getTitle().'</a> <small>('.$obj->getNumImages().')</small>';
+					$html .= '<li><a href="#" title="' . $obj->getID() . '" class="fi_album">' . $obj->getTitle() . '</a> <small>(' . $obj->getNumImages() . ')</small>';
 				}
 				$html .= featuredImage::getFeaturedImageSubalbums($obj);
 				$html .= '</li>';
@@ -190,11 +190,12 @@ class featuredImage {
 	 * @param object $obj Zenpage article, category or page object to assign the thumb
 	 */
 	static function getFeaturedImageSelection($obj) {
+		global $_zp_db;
 		$type = featuredImage::getFeaturedImageType($obj);
-		if($type) {
+		if ($type) {
 			$itemid = $obj->getID();
-			$query = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote($type)." AND `aux` = ".db_quote($itemid));
-			if($query) {
+			$query = $_zp_db->querySingleRow("SELECT `data` FROM " . $_zp_db->prefix('plugin_storage') . " WHERE `type` = " . $_zp_db->quote($type) . " AND `aux` = " . $_zp_db->quote($itemid));
+			if ($query) {
 				return $query['data'];
 			} else {
 				return false;
@@ -208,24 +209,25 @@ class featuredImage {
 	 * @param object $obj Zenpage article, category or page object to assign the thumb
 	 */
 	static function saveFeaturedImageSelection($obj) {
+		global $_zp_db;
 		$type = featuredImage::getFeaturedImageType($obj);
 		$message = '';
-		if(isset($_GET['imgid']) && $type) {
+		if (isset($_GET['imgid']) && $type) {
 			$data = sanitize_numeric($_GET['imgid']);
 			$itemid = $obj->getID();
-			$query = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote($type)." AND `aux` = ".db_quote($itemid));
-			if($query) {
-				$query = query("UPDATE ".prefix('plugin_storage')." SET `data` = ".db_quote($data)." WHERE `type` = ".db_quote($type)." AND `aux` = ".db_quote($itemid ));
+			$query = $_zp_db->querySingleRow("SELECT `data` FROM " . $_zp_db->prefix('plugin_storage') . " WHERE `type` = " . $_zp_db->quote($type) . " AND `aux` = " . $_zp_db->quote($itemid));
+			if ($query) {
+				$query = $_zp_db->query("UPDATE " . $_zp_db->prefix('plugin_storage') . " SET `data` = " . $_zp_db->quote($data) . " WHERE `type` = " . $_zp_db->quote($type) . " AND `aux` = " . $_zp_db->quote($itemid));
 			} else {
-				$query = query("INSERT INTO ".prefix('plugin_storage')." (`type`,`data`,`aux`) VALUES (".db_quote($type).",".db_quote($data).",".db_quote($itemid ).")");
+				$query = $_zp_db->query("INSERT INTO " . $_zp_db->prefix('plugin_storage') . " (`type`,`data`,`aux`) VALUES (" . $_zp_db->quote($type) . "," . db_quote($data) . "," . $_zp_db->quote($itemid) . ")");
 			}
 			if (!$query) {
-				$message .= '<p class="errorbox">'.sprintf(gettext('Query failure: %s'),db_error()).'</p>';
+				$message .= '<p class="errorbox">' . sprintf(gettext('Query failure: %s'), $_zp_db->getError()) . '</p>';
 			}
-		} 
+		}
 		return $message;
 	}
-	
+
 	/**
 	 * Removes albumthumb as entries from plugin_storage table if their object is removed.
 	 *
@@ -233,16 +235,17 @@ class featuredImage {
 	 * @return bool
 	 */
 	static function deleteFeaturedImage($obj) {
+		global $_zp_db;
 		$type = featuredImage::getFeaturedImageType($obj);
-		if($type) {
+		if ($type) {
 			$itemid = $obj->getID();
-			$check = query_single_row("SELECT `data` FROM ".prefix('plugin_storage')." WHERE `type` = ".db_quote($type)." AND `aux` = ".db_quote($itemid));
-			if($check) {
-				$query = query('DELETE FROM '.prefix('plugin_storage').' WHERE `aux` = '.db_quote($itemid).' AND `type` = '.db_quote($type).'',false);
+			$check = $_zp_db->querySingleRow("SELECT `data` FROM " . $_zp_db->prefix('plugin_storage') . " WHERE `type` = " . $_zp_db->quote($type) . " AND `aux` = " . $_zp_db->quote($itemid));
+			if ($check) {
+				$query = $_zp_db->query('DELETE FROM ' . $_zp_db->prefix('plugin_storage') . ' WHERE `aux` = ' . $_zp_db->quote($itemid) . ' AND `type` = ' . $_zp_db->quote($type) . '', false);
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks the class of $obj and returns the Zenpage item type "featuredimage_article/category/page"
 	 * Returns false if no Zenpage object is passed
@@ -380,7 +383,7 @@ class featuredImage {
      * @param bool $effects set to desired image effect (e.g. 'gray' to force gray scale)
      * @return string
      */
-    function printSizedFeaturedImage($obj = NULL,$alt, $size, $width = NULL, $height = NULL, $cropw = NULL, $croph = NULL, $cropx = NULL, $cropy = NULL, $class = NULL, $id = NULL, $thumbStandin = false, $effects = NULL) {
+    function printSizedFeaturedImage($obj = NULL,$alt = '', $size = NULL, $width = NULL, $height = NULL, $cropw = NULL, $croph = NULL, $cropx = NULL, $cropy = NULL, $class = NULL, $id = NULL, $thumbStandin = false, $effects = NULL) {
       $image = getFeaturedImage($obj);
       if ($image) {
         if(isImagePhoto($image)) {
@@ -396,4 +399,3 @@ class featuredImage {
         }
       }
     }
-?>
