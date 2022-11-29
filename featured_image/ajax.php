@@ -183,8 +183,8 @@ if (isset($_GET['getalb']) && isset($_GET['imgpage'])) {
 				<?php
 			} else {
 				foreach ($images as $image) {
-					$imgobj = newImage($obj, $image);
-					if (isImagePhoto($imgobj)) {
+					$imgobj = Image::newImage($obj, $image);
+					if ($imgobj->isPhoto()) {
 						$extraclass = " imagetype";
 					} else {
 						$extraclass = " nonimagetype";
