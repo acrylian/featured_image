@@ -219,7 +219,7 @@ class featuredImage {
 			if ($query) {
 				$query = $_zp_db->query("UPDATE " . $_zp_db->prefix('plugin_storage') . " SET `data` = " . $_zp_db->quote($data) . " WHERE `type` = " . $_zp_db->quote($type) . " AND `aux` = " . $_zp_db->quote($itemid));
 			} else {
-				$query = $_zp_db->query("INSERT INTO " . $_zp_db->prefix('plugin_storage') . " (`type`,`data`,`aux`) VALUES (" . $_zp_db->quote($type) . "," . db_quote($data) . "," . $_zp_db->quote($itemid) . ")");
+				$query = $_zp_db->query("INSERT INTO " . $_zp_db->prefix('plugin_storage') . " (`type`,`data`,`aux`) VALUES (" . $_zp_db->quote($type) . "," . $_zp_db->quote($data) . "," . $_zp_db->quote($itemid) . ")");
 			}
 			if (!$query) {
 				$message .= '<p class="errorbox">' . sprintf(gettext('Query failure: %s'), $_zp_db->getError()) . '</p>';
